@@ -1,23 +1,54 @@
 import csv
-#import os
+import os
 import glob
 import pandas as pd
-#from matplotlib import pyplot as plt
+from matplotlib import pyplot as plt
 import numpy as np
 
-def try_analysis():
+def try_analysis(team):
 
-    with open('tries.csv') as tries:
-        reader = csv.reader(tries, delimiter = '\n')
-        for row in reader:
-            print(row)
+    converted = 0
+    missed = 0
+    tries_scored = 0
+    tries_conceded = 0
+    with open('tries.csv') as file:
+        #row_count = sum(1 for row in file)
+        for row in file:
+            if team in row:
+                tries_scored += 1
+                if "Converted" in row:
+                    converted += 1
+                if "Missed" in row:
+                    missed += 1
+            else:
+                tries_conceded += 1
 
 
+    #print("Total tries scored: ", tries_scored)
+    #print("Total tries conceded: ", tries_conceded)
+
+    labels = ('Scored', 'Conceded')
+    y_pos = np.arange(len(labels))
+    performance = [tries_scored, tries_conceded]
+
+    plt.bar(y_pos, performance, align = 'center', alpha = 0.5)
+    plt.xticks(y_pos, labels)
+    plt.ylabel('Totals')
+    plt.title('Scored vs Conceded')
+
+    plt.show()
+
+    labels = 'Converted', 'Missed'
+    sizes = [converted, missed]
+    fig1, ax1 = plt.subplots()
+    ax1.pie(sizes, labels = labels, autopct = '%1.1f%%', shadow = True, startangle = 90)
+    ax1.axis('equal')
+
+    plt.title('Kicking Accuracy')
+    plt.show()
 
 
-
-
-
+    os.remove('tries.csv')
 
 
     """

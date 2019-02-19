@@ -5,7 +5,6 @@ from analyse_penalty import penalty_analysis
 from analyse_drop_goal import drop_goal_analysis
 from analyse_card import card_analysis
 from analyse_substitution import substitute_analysis
-#from analyse_score import score_analysis
 
 window = Tk()
 width = 250
@@ -34,6 +33,7 @@ Label(window, text = "What to analyse:").place(x = 140, y = 10)
 menu.place(x = 140, y = 30)
 
 def analyse():
+
     optionChoice = option.get()
     teamChoice = team.get()
     teamChoice = teamChoice.lower()
@@ -47,34 +47,29 @@ def analyse():
         if teamChoice in filename and os.path.exists(filename):
 
             if optionChoice == "Try":
-                tries = 'tries.csv'
-                if not os.path.exists(tries):
-                    triesFile = open(tries, 'a+')
-                    with open(filename) as file:
-                        for row in file:
+                with open(filename) as data:
+                    with open('tries.csv', 'a+') as file:
+                        for row in data:
                             if optionChoice in row:
-                                row = row.replace('\n', "")
-                                triesFile.write(row + '\n')
-                                triesFile.close()
-                try_analysis()
+                                file.write(row)
 
+        elif optionChoice == "Penalty":
+            penalty_analysis(filename, teamChoice, optionChoice)
 
-            elif optionChoice == "Penalty":
-                penalty_analysis(filename, teamChoice, optionChoice)
+        elif optionChoice == "Drop Goal":
+            drop_goal_analysis(filename, teamChoice, optionChoice)
 
-            elif optionChoice == "Drop Goal":
-                drop_goal_analysis(filename, teamChoice, optionChoice)
+        elif optionChoice == "Card":
+            card_analysis(filename, teamChoice, optionChoice)
 
-            elif optionChoice == "Card":
-                card_analysis(filename, teamChoice, optionChoice)
-
-            elif optionChoice == "Substitution":
-                substitute_analysis(filename, teamChoice, optionChoice)
-
-            #elif optionChoice == "Score":
-            #    score_analysis(filename, teamChoice)
+        elif optionChoice == "Substitution":
+            substitute_analysis(filename, teamChoice, optionChoice)
 
     window.destroy()
+
+    if optionChoice == "Try":
+        try_analysis(teamChoice)
+
 
 
 button = Button(window, text = "Analyse", command = analyse)
