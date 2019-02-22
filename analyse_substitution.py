@@ -1,15 +1,19 @@
 import pandas as pd
 import numpy as np
+import os
 
-def substitute_analysis(filename, teamChoice, eventChoice):
+def substitute_analysis(team):
 
-    data = pd.read_csv(filename)
-    grouped = data.groupby(['For', 'Event'])
+    data = pd.read_csv('subs.csv')
+    grouped = data.groupby(['For'])
     for name, group in grouped:
-        if name == (teamChoice, eventChoice):
+        if name == team:
             time = group['Time']
-            print(filename)
-            print(group)
-            print("First substitute: ", time.min(axis=0))
-            print("Last substitute: ", time.max(axis=0))
-            print("Average time to make a substitute: ", time.mean(axis=0))
+            total_time = time.value_counts()
+            average = time.mean(axis=0)
+            average = np.round(average, decimals=0)
+            print("Total substitutions: ", time.count())
+            print("Average substitution time: ", average)
+            print(total_time)
+    os.remove('subs.csv')
+
