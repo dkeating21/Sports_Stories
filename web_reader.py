@@ -23,7 +23,7 @@ for line in file:
         match_data = soup.find_all("div", {"class": "block-summary match-summary"})
         for match in match_data:
 
-            info = ["Event", "Card Colour", "Time", "Conversion", "For"]
+            info = ["Event", "Card Colour", "Time", "Conversion", "For", "Score"]
             writeToFile(info, rugbyfile)
 
             host = match.find_all("div", {"class": "team-home"})
@@ -44,10 +44,10 @@ for line in file:
             homeScore = scores[0].text
             awayScore = scores[1].text
 
-            #info = ["", "", "", "", homeTeam, homeScore]
-            #writeToFile(info, rugbyfile)
-            #info = ["", "", "", "", awayTeam, awayScore]
-            #writeToFile(info, rugbyfile)
+            info = ["Home Score", "", "", "", "", homeScore]
+            writeToFile(info, rugbyfile)
+            info = ["Away Score", "", "", "", "", awayScore]
+            writeToFile(info, rugbyfile)
 
             event_strings = ["event event-home", "event event-away"]
 

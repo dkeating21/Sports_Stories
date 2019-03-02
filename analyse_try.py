@@ -3,6 +3,7 @@ import os
 import pandas as pd
 from matplotlib import pyplot as plt
 import numpy as np
+from collections import Counter
 
 def try_analysis(team):
 
@@ -104,5 +105,25 @@ def total_tries():
     plt.title('Total Tries')
 
     plt.show()
+
+    os.remove('tries.csv')
+
+def first_try():
+
+    tries = []
+    with open('tries.csv') as data:
+        for row in data:
+            row = row.replace('\n', "")
+            tries.append(row)
+    print(Counter(tries))
+
+    os.remove('tries.csv')
+
+def tries_frequency():
+
+    with open('tries.csv') as data:
+        for row in data:
+            row = row.replace('\n', "")
+            print(row)
 
     os.remove('tries.csv')
