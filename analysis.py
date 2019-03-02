@@ -4,6 +4,7 @@ import csv
 import pandas as pd
 import analyse_try
 import analyse_kicking
+import analyse_game
 from analyse_penalty import penalty_analysis
 from analyse_card import card_analysis
 from analyse_substitution import substitute_analysis
@@ -27,7 +28,7 @@ menu = OptionMenu(window, team, *teamList)
 Label(window, text = "Team to analyse:").place(x = 0, y = 10)
 menu.place(x = 0, y = 30)
 
-optionList = ["Try", "Penalty", "Card", "Substitution", "Total Tries", "Kick Success", "Conversion"]
+optionList = ["Team Tries", "Try Frequency", "First Try", "Total Team Tries", "Penalty", "Card", "Substitution", "Kick Success", "Conversion", "Form"]
 option = StringVar(window)
 option.set(optionList[0])
 menu = OptionMenu(window, option, *optionList)
@@ -42,36 +43,11 @@ def analyse():
 
     info = ["Event", "Card Colour", "Time", "Conversion", "For"]
 
-    if optionChoice == "Try" or optionChoice == "Total Tries" or optionChoice == "Conversion":
+    if optionChoice == "Total Team Tries":
         with open('tries.csv', 'a+') as tries:
             newRowWriter = csv.writer(tries, lineterminator='\r')
             newRowWriter.writerow(info)
             tries.close()
-
-
-    elif optionChoice == "Penalty":
-        with open('penalties.csv', 'a+') as penalties:
-            newRowWriter = csv.writer(penalties, lineterminator='\r')
-            newRowWriter.writerow(info)
-            penalties.close()
-
-    elif optionChoice == "Kicking Accuracy":
-        with open('kicking.csv', 'a+') as kicking:
-            newRowWriter = csv.writer(kicking, lineterminator='\r')
-            newRowWriter.writerow(info)
-            kicking.close()
-
-    elif optionChoice == "Card":
-        with open('cards.csv', 'a+') as cards:
-            newRowWriter = csv.writer(cards, lineterminator='\r')
-            newRowWriter.writerow(info)
-            cards.close()
-
-    elif optionChoice == "Substitution":
-        with open('subs.csv', 'a+') as subs:
-            newRowWriter = csv.writer(subs, lineterminator='\r')
-            newRowWriter.writerow(info)
-            subs.close()
 
     file = open("fixtures.txt", "r")
     for line in file:
@@ -81,21 +57,21 @@ def analyse():
 
         if optionChoice == "Card":
             with open(filename) as data:
-                with open('cards.csv', 'a') as cards:
+                with open('cards.csv', 'a+') as cards:
                     for row in data:
                         if optionChoice in row:
                             cards.write(row)
 
-        if optionChoice == "Total Tries":
+        if optionChoice == "Total Team Tries":
             with open(filename) as data:
-                with open('tries.csv', 'a') as tries:
+                with open('tries.csv', 'a+') as tries:
                     for row in data:
                         if "Try" in row:
                             tries.write(row)
 
         if optionChoice == "Kick Success":
             with open(filename) as data:
-                with open('kicking.csv', 'a') as kicking:
+                with open('kicking.csv', 'a+') as kicking:
                     for row in data:
                         if "Try" in row:
                             kicking.write(row)
@@ -103,7 +79,7 @@ def analyse():
                             kicking.write(row)
 
         if teamChoice in filename and os.path.exists(filename):
-            if optionChoice == "Try" or optionChoice == "Conversion":
+            if optionChoice == "Team Tries" or optionChoice == "Conversion":
                 with open(filename) as data:
                     with open('tries.csv', 'a+') as tries:
                         for row in data:
@@ -121,15 +97,65 @@ def analyse():
                 with open(filename) as data:
                     with open('subs.csv', 'a+') as subs:
                         for row in data:
-                            if optionChoice in row:
-                                subs.write(row)
+                            if teamChoice in row:
+                                if optionChoice in row:
+                                    subs.write(row)
+
+            elif optionChoice == "Form":
+                if filename.startswith(teamChoice):
+                    with open(filename) as data:
+                        with open('home.csv', 'a+') as home:
+                            for row in data:
+                                if "Home Score" in row:
+                                    home.write(row)
+                                if "Away Score" in row:
+                                    home.write(row)
+
+                else:
+                    with open(filename) as data:
+                        with open('away.csv', 'a+') as away:
+                            away.write(filename)
+                            for row in data:
+                                if "Home Score" in row:
+                                    away.write(row)
+                                if "Away Score" in row:
+                                    away.write(row)
+
+            elif optionChoice == "First Try":
+                with open('tries.csv', 'a+') as tries:
+                    data = pd.read_csv(filename)
+                    grouped = data.groupby(['For', 'Event'])
+                    for name, group in grouped:
+                        if name == (teamChoice, 'Try'):
+                            time = group['Time']
+                            firstTry = str(time.min())
+                            tries.write(firstTry + '\n')
+
+            elif optionChoice == "Try Frequency":
+                with open(filename) as data:
+                    with open('tries.csv', 'a+') as tries:
+                        csv_reader = csv.reader(data, delimiter=',')
+                        for row in csv_reader:
+                            if teamChoice in row:
+                                if "Try" in row:
+                                    for i, cell in enumerate(row):
+                                        if i == 2:
+                                            time = ("{cell}".format(**locals()))
+                                            tries.write(time + '\n')
+
 
     window.destroy()
 
-    if optionChoice == "Try":
+    if optionChoice == "Team Tries":
         analyse_try.try_analysis(teamChoice)
 
-    elif optionChoice == "Total Tries":
+    elif optionChoice == "Try Frequency":
+        analyse_try.tries_frequency()
+
+    elif optionChoice == "First Try":
+        analyse_try.first_try()
+
+    elif optionChoice == "Total Team Tries":
         analyse_try.total_tries()
 
     elif optionChoice == "Conversion":
@@ -145,7 +171,10 @@ def analyse():
         card_analysis()
 
     elif optionChoice == "Substitution":
-        substitute_analysis(teamChoice)
+        substitute_analysis()
+
+    elif optionChoice == "Form":
+        analyse_game.match_form(teamChoice)
 
 
 

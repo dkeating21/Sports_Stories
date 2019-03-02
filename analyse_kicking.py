@@ -141,18 +141,6 @@ def total_accuracy():
                 if "Missed" in row:
                     kings_missed += 1
 
-    labels = ("Munster", "Glasgow", "Ospreys", "Connacht", "Cardiff", "Cheetahs", "Zebre", "Leinster", "Edinburgh", "Benetton","Scarlets", "Ulster", "Dragons", "Kings")
-    performance = [munster_converted, glasgow_converted, ospreys_converted, connacht_converted, cardiff_converted, cheetahs_converted, zebre_converted, leinster_converted, edinburgh_converted, benneton_converted, scarlets_converted, ulster_converted, dragons_converted, kings_converted]
-    y_pos = np.arange(len(labels))
-    fig, ax = plt.subplots(figsize=(13.8, 5))
-
-    plt.bar(y_pos, performance, align='center', alpha=0.5)
-    plt.xticks(y_pos, labels)
-    plt.ylabel('Totals')
-    plt.title('Kicking Success')
-
-    plt.show()
-
     n_groups = 14
     converted = [munster_converted, glasgow_converted, ospreys_converted, connacht_converted, cardiff_converted, cheetahs_converted, zebre_converted, leinster_converted, edinburgh_converted, benneton_converted, scarlets_converted, ulster_converted, dragons_converted, kings_converted]
     missed = [munster_missed, glasgow_missed, ospreys_missed, connacht_missed, cardiff_missed, cheetahs_missed, zebre_missed, leinster_missed, edinburgh_missed, benneton_missed, scarlets_missed, ulster_missed, dragons_missed, kings_missed]
@@ -167,7 +155,7 @@ def total_accuracy():
 
     plt.xlabel('Team')
     plt.ylabel('Total of kicks')
-    plt.title('Kicking Attempts')
+    plt.title('Kicking Success')
     plt.xticks(index + bar_width, ("Munster", "Glasgow", "Ospreys", "Connacht", "Cardiff", "Cheetahs", "Zebre", "Leinster", "Edinburgh", "Benetton", "Scarlets", "Ulster", "Dragons", "Kings"))
     plt.legend()
 
