@@ -83,13 +83,11 @@ def match_form(team):
                 for i, cell in enumerate(row):
                     if i == 5:
                         homeScore = ("{cell}".format(**locals()))
-                        print(homeScore)
                         home.append(homeScore)
             if "Away Score" in row:
                 for i, cell in enumerate(row):
                     if i == 5:
                         awayScore = ("{cell}".format(**locals()))
-                        print(awayScore)
                         away.append(awayScore)
 
         p = 0

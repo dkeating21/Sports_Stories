@@ -109,7 +109,92 @@ def total_tries():
 
 def first_try():
 
+    munster_try = 0
+    leinster_try = 0
+    ulster_try = 0
+    connacht_try = 0
+    glasgow_try = 0
+    ospreys_try = 0
+    cardiff_try = 0
+    cheetahs_try = 0
+    zebre_try = 0
+    edinburgh_try = 0
+    benneton_try = 0
+    scarlets_try = 0
+    dragons_try = 0
+    kings_try = 0
+    data = pd.read_csv('tries.csv')
+    grouped = data.groupby(['For', 'Event'])
+    for name, group in grouped:
+        if name == ("munster", "Try"):
+            time = group['Time']
+            munster_try = time.mean(axis=0)
 
+        elif name == ("leinster", "Try"):
+            time = group['Time']
+            leinster_try = time.mean(axis=0)
+
+        elif name == ("ulster", "Try"):
+            time = group['Time']
+            ulster_try = time.mean(axis=0)
+
+        elif name == ("connacht", "Try"):
+            time = group['Time']
+            connacht_try = time.mean(axis=0)
+
+        elif name == ("glasgow warriors", "Try"):
+            time = group['Time']
+            glasgow_try = time.mean(axis=0)
+
+        elif name == ("ospreys", "Try"):
+            time = group['Time']
+            ospreys_try = time.mean(axis=0)
+
+        elif name == ("cardiff blues", "Try"):
+            time = group['Time']
+            cardiff_try = time.mean(axis=0)
+
+        elif name == ("cheetahs", "Try"):
+            time = group['Time']
+            cheetahs_try = time.mean(axis=0)
+
+        elif name == ("zebre", "Try"):
+            time = group['Time']
+            zebre_try = time.mean(axis=0)
+
+        elif name == ("edinburgh", "Try"):
+            time = group['Time']
+            edinburgh_try = time.mean(axis=0)
+
+        elif name == ("benetton", "Try"):
+            time = group['Time']
+            benneton_try = time.mean(axis=0)
+
+        elif name == ("scarlets", "Try"):
+            time = group['Time']
+            scarlets_try = time.mean(axis=0)
+
+        elif name == ("dragons", "Try"):
+            time = group['Time']
+            dragons_try = time.mean(axis=0)
+
+        elif name == ("southern kings", "Try"):
+            time = group['Time']
+            kings_try = time.mean(axis=0)
+
+    labels = ("Munster", "Glasgow", "Ospreys", "Connacht", "Cardiff", "Cheetahs", "Zebre", "Leinster", "Edinburgh", "Benetton", "Scarlets", "Ulster", "Dragons", "Kings")
+    y_pos = np.arange(len(labels))
+    performance = [munster_try, glasgow_try, ospreys_try, connacht_try, cardiff_try, cheetahs_try, zebre_try, leinster_try, edinburgh_try, benneton_try, scarlets_try, ulster_try, dragons_try, kings_try]
+    fig, ax = plt.subplots(figsize=(13.8, 5))
+
+    plt.scatter(y_pos, performance, label='center', color='red')
+    plt.xticks(y_pos, labels)
+    plt.xlabel('Teams')
+    plt.ylabel('Time')
+    plt.title('Average Time to Score First Try')
+
+    plt.show()
+    """
     data = pd.read_csv('tries.csv')
     tryCount = pd.DataFrame(data['Time'].value_counts())
 
@@ -122,6 +207,7 @@ def first_try():
     plt.title('First Try Scored')
 
     plt.show()
+    """
 
     os.remove('tries.csv')
 
