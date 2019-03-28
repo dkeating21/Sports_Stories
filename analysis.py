@@ -42,11 +42,25 @@ def analyse():
     teamChoice = teamChoice.lower()
 
     info = ["Event", "Card Colour", "Time", "Conversion", "For"]
+    time = ['Time']
+
 
     if optionChoice == "Total Team Tries":
         with open('tries.csv', 'a+') as tries:
             newRowWriter = csv.writer(tries, lineterminator='\r')
             newRowWriter.writerow(info)
+            tries.close()
+
+    if optionChoice == "Substitution":
+        with open('subs.csv', 'a+') as tries:
+            newRowWriter = csv.writer(tries, lineterminator='\r')
+            newRowWriter.writerow(info)
+            tries.close()
+
+    if optionChoice == "First Try" or optionChoice == "Try Frequency":
+        with open('tries.csv', 'a+') as tries:
+            newRowWriter = csv.writer(tries, lineterminator='\r')
+            newRowWriter.writerow(time)
             tries.close()
 
     file = open("fixtures.txt", "r")
@@ -114,7 +128,6 @@ def analyse():
                 else:
                     with open(filename) as data:
                         with open('away.csv', 'a+') as away:
-                            away.write(filename)
                             for row in data:
                                 if "Home Score" in row:
                                     away.write(row)
@@ -122,7 +135,7 @@ def analyse():
                                     away.write(row)
 
             elif optionChoice == "First Try":
-                with open('tries.csv', 'a+') as tries:
+                with open('tries.csv', 'a') as tries:
                     data = pd.read_csv(filename)
                     grouped = data.groupby(['For', 'Event'])
                     for name, group in grouped:

@@ -3,7 +3,6 @@ import os
 import pandas as pd
 from matplotlib import pyplot as plt
 import numpy as np
-from collections import Counter
 
 def try_analysis(team):
 
@@ -110,20 +109,36 @@ def total_tries():
 
 def first_try():
 
-    tries = []
-    with open('tries.csv') as data:
-        for row in data:
-            row = row.replace('\n', "")
-            tries.append(row)
-    print(Counter(tries))
+
+    data = pd.read_csv('tries.csv')
+    tryCount = pd.DataFrame(data['Time'].value_counts())
+
+    y = np.arange(len(tryCount.index.tolist()))
+
+    plt.scatter(y, tryCount['Time'], label = 'center', color = 'red')
+    plt.xticks(y, tryCount.index.tolist())
+    plt.xlabel('Time')
+    plt.ylabel('Total')
+    plt.title('First Try Scored')
+
+    plt.show()
 
     os.remove('tries.csv')
 
 def tries_frequency():
 
-    with open('tries.csv') as data:
-        for row in data:
-            row = row.replace('\n', "")
-            print(row)
+    data = pd.read_csv('tries.csv')
+    tryCount = pd.DataFrame(data['Time'].value_counts())
+
+    y = np.arange(len(tryCount.index.tolist()))
+
+    plt.figure(figsize=(13.5, 5))
+    plt.bar(y, tryCount['Time'], align='center', alpha = 0.5)
+    plt.xticks(y, tryCount.index.tolist())
+    plt.xlabel('Time')
+    plt.ylabel('Total')
+    plt.title('Try Frequency')
+
+    plt.show()
 
     os.remove('tries.csv')
