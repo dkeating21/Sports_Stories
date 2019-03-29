@@ -10,11 +10,11 @@ from analyse_penalty import penalty_analysis
 from analyse_card import card_analysis
 
 window = Tk()
-width = 250
-height = 160
+width = 255
+height = 150
 window.title("Analysis")
-window.minsize(250,160)
-window.maxsize(250,160)
+window.minsize(255,150)
+window.maxsize(255,150)
 screen_width = window.winfo_screenwidth()
 screen_height = window.winfo_screenheight()
 x = (screen_width/2) - (width/2)
