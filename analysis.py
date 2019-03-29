@@ -6,15 +6,16 @@ import analyse_try
 import analyse_kicking
 import analyse_game
 import analyse_substitution
+import analyse_scoring
 from analyse_penalty import penalty_analysis
 from analyse_card import card_analysis
 
 window = Tk()
-width = 255
+width = 265
 height = 150
 window.title("Analysis")
-window.minsize(255,150)
-window.maxsize(255,150)
+window.minsize(265,150)
+window.maxsize(265,150)
 screen_width = window.winfo_screenwidth()
 screen_height = window.winfo_screenheight()
 x = (screen_width/2) - (width/2)
@@ -28,7 +29,7 @@ menu = OptionMenu(window, team, *teamList)
 Label(window, text = "Team to analyse:").place(x = 0, y = 10)
 menu.place(x = 0, y = 30)
 
-optionList = ["Scored vs Conceded", "Try Frequency", "First Try", "Total Team Tries", "Penalty", "Card", "Substitution", "Average Sub", "Kick Success", "Conversion", "Form"]
+optionList = ["Scored vs Conceded", "Timing of Tries Scored", "Try Frequency", "First Try", "Total Team Tries", "Penalty", "Card", "Substitution", "Average Sub", "Kick Success", "Conversion", "Form", "Points Spread"]
 option = StringVar(window)
 option.set(optionList[0])
 menu = OptionMenu(window, option, *optionList)
@@ -120,6 +121,18 @@ def analyse():
                             if 'Try' in row:
                                 tries.write(row)
 
+            elif optionChoice == "Timing of Tries Scored":
+                with open(filename) as data:
+                    with open('tries.csv', 'a+') as tries:
+                        csv_reader = csv.reader(data, delimiter=',')
+                        for row in csv_reader:
+                            if teamChoice in row:
+                                if "Try" in row:
+                                    for i, cell in enumerate(row):
+                                        if i == 2:
+                                            time = ("{cell}".format(**locals()))
+                                            tries.write(time + '\n')
+
             elif optionChoice == "Penalty":
                 with open(filename) as data:
                     with open('penalties.csv', 'a+') as penalties:
@@ -166,11 +179,25 @@ def analyse():
                                             time = ("{cell}".format(**locals()))
                                             tries.write(time + '\n')
 
+            elif optionChoice == "Points Spread":
+                with open(filename) as data:
+                    with open('scores.csv', 'a+') as score:
+                        for row in data:
+                            if "Try" in row:
+                                score.write(row)
+                            elif "Penalty" in row:
+                                score.write(row)
+                            elif "Drop Goal" in row:
+                                score.write(row)
+
 
     window.destroy()
 
     if optionChoice == "Scored vs Conceded":
         analyse_try.try_analysis(teamChoice)
+
+    elif optionChoice == "Timing of Tries Scored":
+        analyse_scoring.timing_of_scores()
 
     elif optionChoice == "Try Frequency":
         analyse_try.tries_frequency()
@@ -201,6 +228,9 @@ def analyse():
 
     elif optionChoice == "Average Sub":
         analyse_substitution.average_sub()
+
+    elif optionChoice == "Points Spread":
+        analyse_scoring.total_scores()
 
 
 
