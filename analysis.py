@@ -83,14 +83,14 @@ def analyse():
                         if optionChoice in row:
                             cards.write(row)
 
-        if optionChoice == "Total Team Tries":
+        elif optionChoice == "Total Team Tries":
             with open(filename) as data:
                 with open('tries.csv', 'a+') as tries:
                     for row in data:
                         if "Try" in row:
                             tries.write(row)
 
-        if optionChoice == "Kick Success":
+        elif optionChoice == "Kick Success":
             with open(filename) as data:
                 with open('kicking.csv', 'a+') as kicking:
                     for row in data:
@@ -99,7 +99,7 @@ def analyse():
                         if "Penalty" in row:
                             kicking.write(row)
 
-        if optionChoice == "Average Sub":
+        elif optionChoice == "Average Sub":
             with open(filename) as data:
                 with open('subs.csv', 'a+') as subs:
                     for row in data:
@@ -112,6 +112,17 @@ def analyse():
                     for row in data:
                         if "Try" in row:
                             tries.write(row)
+
+        elif optionChoice == "Points Spread":
+            with open(filename) as data:
+                with open('scores.csv', 'a+') as score:
+                    for row in data:
+                        if "Try" in row:
+                            score.write(row)
+                        elif "Penalty" in row:
+                            score.write(row)
+                        elif "Drop Goal" in row:
+                            score.write(row)
 
         if teamChoice in filename and os.path.exists(filename):
             if optionChoice == "Scored vs Conceded" or optionChoice == "Conversion":
@@ -178,17 +189,6 @@ def analyse():
                                         if i == 2:
                                             time = ("{cell}".format(**locals()))
                                             tries.write(time + '\n')
-
-            elif optionChoice == "Points Spread":
-                with open(filename) as data:
-                    with open('scores.csv', 'a+') as score:
-                        for row in data:
-                            if "Try" in row:
-                                score.write(row)
-                            elif "Penalty" in row:
-                                score.write(row)
-                            elif "Drop Goal" in row:
-                                score.write(row)
 
 
     window.destroy()
